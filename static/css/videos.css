@@ -1,0 +1,37 @@
+
+
+header .logo {
+    font-size: 24px;
+}
+
+header input {
+    max-width: 400px;
+}
+
+.video-item {
+    width: 250px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.video-item img {
+    width: 100%;
+    height: auto;
+}
+
+.video-item .title {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.container  {
+    margin:20px auto;
+    padding:25px 5px;
+    min-height:200px;
+    max-width:500px;
+    background:transparent;
+   
+    align-items: middle;
+}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar - My Flask App{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100..900;1,100..900&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+
+<h2 class="calendar-heading">Calendar</h2>
+
+<div id="calendar" class="calendar-container"></div>
+
+<!-- Event Form -->
+<form id="event-form" class="event-form" style="display: none;">
+    <input type="text" id="event-title" placeholder="Event Title" class="form-control" required>
+    <textarea id="event-description" placeholder="Event Description" class="form-control"></textarea>
+    <input type="date" id="event-date" class="form-control" required>
+    <select id="event-importance" class="form-control">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Add Event</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: function(fetchInfo, successCallback, failureCallback) {
+            fetch('/get_events')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched events:', data); // Debugging log
+                    var events = data.events.map(event => {
+                        return {
+                            title: event.title,
+                            start: event.date,
+                            backgroundColor: getImportanceColor(event.importance)
+                        };
+                    });
+                    successCallback(events);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error); // Debugging log
+                    failureCallback(error);
+                });
+        },
+        dateClick: function(info) {
+            document.getElementById('event-date').value = info.dateStr;
+            document.getElementById('event-form').style.display = 'block';
+        }
+    });
+    calendar.render();
+
+    document.getElementById('event-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var title = document.getElementById('event-title').value;
+        var description = document.getElementById('event-description').value;
+        var date = document.getElementById('event-date').value;
+        var importance = document.getElementById('event-importance').value;
+
+        fetch('/add_event', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${encodeURIComponent(date)}&importance=${encodeURIComponent(importance)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Event added:', data); // Debugging log
+            if (data.status === 'success') {
+                calendar.refetchEvents();
+                document.getElementById('event-form').reset();
+                document.getElementById('event-form').style.display = 'none';
+            } else {
+                alert('Error adding event');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding event:', error); // Debugging log
+            alert('Error adding event');
+        });
+    });
+
+    function getImportanceColor(importance) {
+        switch (importance) {
+            case 'high': return '#E53935';
+            case 'medium': return '#FFB74D';
+            case 'low': return '#FFF59D';
+            default: return '#9E9E9E';
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

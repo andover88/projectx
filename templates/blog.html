@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar - My Flask App{% endblock %}
+
+{% block content %}
+
+
+<div class="main">
+
+   <section class="content">
+     <h1>1. Setup and Configuration</h1>
+     <p><b>Loading Environment Variables: The dotenv library is used to load environment variables from a .env file, which is useful for storing sensitive information like API keys and secrets.
+
+        python</p>
+     <pre><code>load_dotenv()
+    </code></pre>
+
+   <hr>
+ 
+ 
+     <p>Flask App Initialization: The Flask app is created and configured. The secret key is set for session management, and the SQLite database URI is specified.</p>
+     <pre><code>app = Flask(__name__)
+        app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
+        db = SQLAlchemy(app)
+    </code></pre>
+    <p>OAuth Setup: Google OAuth is configured using the Authlib library. The client ID, client secret, and redirect URI are fetched from environment variables.</p>
+    <pre><code>oauth = OAuth(app)
+        google = oauth.register(
+            name='google',
+            client_id=os.getenv('GOOGLE_CLIENT_ID'),
+            client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+            access_token_url='https://accounts.google.com/o/oauth2/token',
+            authorize_url='https://accounts.google.com/o/oauth2/auth',
+            api_base_url='https://www.googleapis.com/oauth2/v2/',
+            client_kwargs={'scope': 'openid profile email'},
+            redirect_uri=os.getenv('GOOGLE_REDIRECT_URI')
+        )
+        
+    </code></pre>
+    <h1>2. Database Models</h1>
+    <p>User Model: Represents users with fields for id, username, and password_hash. Passwords are hashed using werkzeug.security</p>
+    <pre><code>class User(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        username = db.Column(db.String(150), unique=True, nullable=False)
+        password_hash = db.Column(db.String(150), nullable=True)
+    
+        def set_password(self, password):
+            self.password_hash = generate_password_hash(password)
+    
+        def check_password(self, password):
+            return check_password_hash(self.password_hash, password)
+    
+        
+    </code></pre>
+    <p>
+        Event Model: Represents events with id, title, description, date, and importance.
+    </p>
+    <pre><code>
+        class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    date = db.Column(db.Date, nullable=False)
+    importance = db.Column(db.String(50), nullable=False)
+
+    </code></pre>
+    <p>BlogPost Model: Represents blog posts with id, title, content, and created_at.</p>
+    <pre><code>class BlogPost(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String(255), nullable=False)
+        content = db.Column(db.Text, nullable=False)
+        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+        def __repr__(self):
+            return f'<BlogPost {self.title}>'
+    </code></pre>
+<h2>3. Routes and Views</h2>
+<p>
+    Home Page: Redirects to the dashboard if a user is logged in; otherwise, it renders the home page.
+</p>
+<pre><code>
+    @app.route('/')
+def home():
+    if 'username' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('index.html')
+
+</code></pre>
+<p>
+    Login and Registration: Handles user login and registration. Passwords are checked and set using the User model methods.
+</p>
+<pre><code>
+    @app.route('/login', methods=['POST'])
+def login():
+    # Authentication logic
+
+</code></pre>
+<pre><code>
+    @app.route('/register', methods=['POST'])
+def register():
+    # Registration logic
+
+</code></pre>
+<p>
+    Google OAuth: Handles Google login and authorization. The authorization code is exchanged for an access token, and user information is retrieved and used to log in or register the user.
+</p>
+<pre>
+    <code>
+        @app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('authorize_google', _external=True)
+    return google.authorize_redirect(redirect_uri)
+    </code>
+</pre>
+<pre><code>
+    @app.route('/auth/callback')
+def authorize_google():
+    # Google OAuth callback logic
+
+</code></pre>
+<p>
+    Dashboard: Displays the user's dashboard if logged in.
+</p>
+<pre><code>
+    @app.route('/dashboard')
+def dashboard():
+    # Dashboard logic
+
+</code></pre>
+<p>
+    Logout: Logs out the user by clearing the session.
+</p>
+<pre><code>
+    @app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('home'))
+
+</code></pre>
+<p>
+    Event Management: Allows fetching, adding, and displaying events.
+</p>
+<pre><code>
+    @app.route('/get_events', methods=['GET'])
+def get_events():
+    return jsonify({"events": events})
+
+</code></pre>
+<pre><code>
+    @app.route('/add_event', methods=['POST'])
+def add_event():
+    # Adding event logic
+</code></pre>
+<p>
+    Blog: Displays a list of blog posts and individual blog posts.
+</p>
+<pre>
+    <code>
+        @app.route('/blog')
+def blog():
+    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    return render_template('blog.html', posts=posts)
+    </code>
+</pre>
+<pre>
+    <code>
+        @app.route('/blog/<int:post_id>')
+def blog_post(post_id):
+    post = BlogPost.query.get_or_404(post_id)
+    return render_template('blog_post.html', post=post)
+    </code>
+</pre>
+<h2>
+    4. Running the Application
+</h2>
+<p>
+    Database Creation: When the application starts, it creates the database tables if they don't exist.
+
+
+</p>
+<pre>
+    <code>
+        if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Creates the database tables
+    app.run(debug=True)
+    </code>
+</pre>
+   </section>
+  
+ </div>
+ 
+{% endblock %}

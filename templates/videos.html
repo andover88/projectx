@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<body style="position: relative;">
+    <div class="container-fluid" style="width: 80%; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+        <header class="bg-light border-bottom py-2">
+            <div class="contain d-flex align-items-center">
+                <div class="logo font-weight-bold mr-3">MyTube</div>
+                <input type="text" id="search" class="form-control mr-2" placeholder="Search...">
+                <button id="searchButton" class="btn btn-primary">Search</button>
+                <button id="toggleSelect" class="btn btn-secondary ml-2">Select</button>
+                <button id="deleteSelected" class="btn btn-danger ml-2">Delete Selected</button>
+            </div>
+        </header>
+        <div class="container mt-3">
+            <div class="mb-4">
+                <h2>Upload New Video</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="videoTitle">Title:</label>
+                        <input type="text" id="videoTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="videoThumbnail">Thumbnail URL:</label>
+                        <input type="url" id="videoThumbnail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="videoUrl">Video URL:</label>
+                        <input type="url" id="videoUrl" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+            <div class="row" id="videoList">
+                <!-- Videos will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript code will go here
+    </script>
+</body>
+
+    <script src="script.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+const videoList = document.getElementById('videoList');
+const uploadForm = document.getElementById('uploadForm');
+const searchInput = document.getElementById('search');
+const searchButton = document.getElementById('searchButton');
+const toggleSelectButton = document.getElementById('toggleSelect');
+const deleteSelectedButton = document.getElementById('deleteSelected');
+
+let selectMode = false;
+
+// Function to get videos from localStorage
+function getVideos() {
+    const storedVideos = localStorage.getItem('videos');
+    return storedVideos ? JSON.parse(storedVideos) : [];
+}
+
+// Function to save videos to localStorage
+function saveVideos(videos) {
+    localStorage.setItem('videos', JSON.stringify(videos));
+}
+
+// Function to render videos
+function renderVideos(videoArray) {
+    videoList.innerHTML = '';
+    videoArray.forEach((video, index) => {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'col-md-4 mb-4';
+        videoItem.innerHTML = `
+            <div class="video-item">
+                ${selectMode ? `<input type="checkbox" class="select-video" data-index="${index}">` : ''}
+                <a href="${video.url}" target="_blank" class="video-thumbnail">
+                    <img src="${video.thumbnail}" alt="${video.title}" class="img-fluid" style="width: 100%; height: auto;">
+                </a>
+                <div class="title">${video.title}</div>
+            </div>
+        `;
+        videoList.appendChild(videoItem);
+    });
+}
+
+// Handle video upload
+uploadForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('videoTitle').value;
+    const thumbnail = document.getElementById('videoThumbnail').value;
+    const url = document.getElementById('videoUrl').value;
+    
+    const videos = getVideos();
+    videos.push({ title, thumbnail, url });
+    
+    // Save updated videos to localStorage
+    saveVideos(videos);
+    
+    // Render the updated video list
+    renderVideos(videos);
+    
+    // Clear the form
+    uploadForm.reset();
+});
+
+// Handle search
+searchButton.addEventListener('click', function () {
+    const query = searchInput.value.toLowerCase();
+    const videos = getVideos();
+    const filteredVideos = videos.filter(video => video.title.toLowerCase().includes(query));
+    renderVideos(filteredVideos);
+});
+
+// Handle toggle select mode
+toggleSelectButton.addEventListener('click', function () {
+    selectMode = !selectMode;
+    toggleSelectButton.textContent = selectMode ? 'Deselect' : 'Select';
+    renderVideos(getVideos());
+});
+
+// Handle delete selected
+deleteSelectedButton.addEventListener('click', function () {
+    const selectedCheckboxes = document.querySelectorAll('.select-video:checked');
+    const indicesToDelete = Array.from(selectedCheckboxes).map(checkbox => parseInt(checkbox.getAttribute('data-index')));
+    
+    if (indicesToDelete.length > 0) {
+        let videos = getVideos();
+        videos = videos.filter((_, index) => !indicesToDelete.includes(index));
+        saveVideos(videos);
+        renderVideos(videos);
+    }
+});
+
+// Initial render
+renderVideos(getVideos());
+
+
+    </script>
+    
+</body>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<body>
+<div class="container">
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <div class="main-container" style="height: 300px;">
+        <div class="top">
+            <h1 class="_titles">Notes</h1>
+            <button class="add">+</button>
+        </div>
+
+        <!-- Search input for notes -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search notes..." value="{{ request.args.get('search', '') }}">
+        </div>
+
+        <div class="add-notes-container">
+            <form method="POST" action="{{ url_for('add_note') }}">
+                <div class="newNoteContainer">
+                    <h2 class="_titles">Add note</h2>
+                    <input type="text" name="title" class="newNoteTitle" placeholder="Title..." required>
+                    <textarea name="description" class="newNote" placeholder="write here..." required></textarea> <!-- Updated name -->
+                    <div class="buttons">
+                        <button type="submit" class="save">Save</button>
+                        <button type="button" class="cancel">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="notes-container">
+            {% for note in notes %}
+                <div class="notes">
+                    <h2>{{ note.title }}</h2>
+                    <p>{{ note.description }}</p> <!-- Updated from `text` to `description` -->
+                    <a href="{{ url_for('delete_note', id=note.id) }}" class="btn btn-danger">Delete</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".add-notes-container").hide();
+
+        // Add button
+        $(".add").on("click", function() {
+            $(".add-notes-container").animate({ width: "toggle" });
+            $(".add").hide();
+        });
+
+        // Cancel button
+        $(".cancel").on("click", function() {
+            $(".add-notes-container").animate({ width: "toggle" });
+            $(".newNoteTitle").val("");
+            $(".newNote").val("");
+            $(".add").show();
+        });
+
+        // Search functionality
+        $("#search-input").on("input", function() {
+            let query = $(this).val();
+            window.location.href = "?search=" + encodeURIComponent(query);
+        });
+    });
+</script>
+{% endblock %}
