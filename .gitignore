@@ -1,0 +1,36 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.env/
+
+# Database files
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# IDE and editor folders
+.vscode/
+.idea/
+
+# macOS Finder
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Coverage reports
+.coverage
+coverage.xml
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
