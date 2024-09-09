@@ -9,12 +9,14 @@ cryptography==43.0.1
 Flask==3.0.3
 Flask-SQLAlchemy==3.1.1
 greenlet==3.0.3
+gunicorn==23.0.0
 idna==3.8
 itsdangerous==2.2.0
 Jinja2==3.1.4
 mailslurp-client==15.19.22
 MarkupSafe==2.1.5
 oauthlib==3.2.2
+packaging==24.1
 pycparser==2.22
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
