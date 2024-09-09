@@ -190,7 +190,7 @@ def authorize_google():
         
         user = User.query.filter_by(username=email).first()
         if not user:
-            new_user = User(username=email)
+            new_user = User(username=email, email=email)
             db.session.add(new_user)
             db.session.commit()
         
