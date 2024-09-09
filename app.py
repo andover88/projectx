@@ -46,6 +46,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -181,19 +182,19 @@ def authorize_google():
     try:
         token = google.authorize_access_token()
         user_info = google.parse_id_token(token)
-        username = user_info.get('email')
+        email = user_info.get('email')
         
-        if not username:
+        if not email:
             flash("Unable to retrieve user information from Google. Please try again.")
             return redirect(url_for('home'))
         
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=email).first()
         if not user:
-            new_user = User(username=username)
+            new_user = User(username=email)
             db.session.add(new_user)
             db.session.commit()
         
-        session['username'] = username
+        session['username'] = email
         return redirect(url_for('dashboard'))
     
     except Exception as e:
