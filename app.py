@@ -194,7 +194,7 @@ def authorize_google():
             db.session.commit()
         
         session['username'] = username
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
     
     except Exception as e:
         app.logger.error(f"Error during Google authorization: {str(e)}")
