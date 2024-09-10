@@ -2,7 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
 
 /* Base styles */
-
+body{
+  height: auto;
+}
 .container {
     max-width: 100%;
     overflow-x: hidden;
@@ -137,12 +139,7 @@ width: 100%;
 margin-bottom: 10px;
 }
 }
-main {
-    margin-top:6rem;
-}
-section {
-    margin-bottom: 18rem;
-}
+
 
 @media (max-width: 480px) {
 .newNoteContainer {

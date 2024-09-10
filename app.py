@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from sqlalchemy import or_
-
+import logging
 # Load environment variables
 load_dotenv()
 
@@ -113,6 +113,8 @@ def login_google():
 @app.route('/dashboard')
 def dashboard():
     if 'username' in session:
+        logging.info(f"User is logged in: {session['username']}")
+
         user = User.query.filter_by(username=session['username']).first()
         search_query = request.args.get('search', '').strip()
         if search_query:
@@ -125,6 +127,7 @@ def dashboard():
         else:
             notes = Note.query.all()
         return render_template('dashboard.html', user=user, notes=notes)
+    logging.info("User not logged in, redirecting to login")
     return redirect(url_for('login_google'))
 
 @app.route('/add', methods=['POST'])
