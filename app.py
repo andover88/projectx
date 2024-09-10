@@ -237,6 +237,9 @@ def add_event():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/qr-scanner')
+def qr_scanner():
+    return render_template('qr_scanner.html')
 @app.route('/blog')
 def blog():
     posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()

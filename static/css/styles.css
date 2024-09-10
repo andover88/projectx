@@ -5,6 +5,7 @@ body {
 }
 nav{
     background-color: #697565;
+    color: #ddd;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 .navbar {
@@ -154,7 +155,7 @@ section {
   
   h1, h2, h3, h4 {
     line-height: 1.2;
-    color: #222;
+    color: #f8eaea;
   }
   
   p, li {

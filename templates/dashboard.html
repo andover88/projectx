@@ -5,11 +5,11 @@
 {% block content %}
 <body>
 <div class="container">
-    <h1>Welcome, {{ user.username }}</h1>
-
+    <p style="color: white;">Welcome, {{ user.username }}</p>
+<main>
     <div class="main-container" style="height: 300px;">
         <div class="top">
-            <h1 class="_titles">Notes</h1>
+            <h1 class="_titles">Add Notes</h1>
             <button class="add">+</button>
         </div>
 
@@ -21,7 +21,7 @@
         <div class="add-notes-container">
             <form method="POST" action="{{ url_for('add_note') }}">
                 <div class="newNoteContainer">
-                    <h2 class="_titles">Add note</h2>
+                    <h2 class="_titles"></h2>
                     <input type="text" name="title" class="newNoteTitle" placeholder="Title..." required>
                     <textarea name="description" class="newNote" placeholder="write here..." required></textarea> <!-- Updated name -->
                     <div class="buttons">
@@ -41,33 +41,101 @@
                 </div>
             {% endfor %}
         </div>
+        
     </div>
 </div>
-
+</main>
+<section>
+<div class="search-container">
+    <h2>Search Word Meaning</h2>
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button onclick="searchMeaning()">Search</button>
+    <div id="meaning"></div>
+</div>
+</section>
+<footer>
+    <div class="mini-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="copyright-text">
+                <p>© 2024
+                  <a href="#">Fernando</a>. All rights reserved. Created by
+                  <a href="#">Vergara</a>
+                </p>
+              </div>
+    
+              <div class="go_top">
+                <span class="icon-arrow-up"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </footer>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $(".add-notes-container").hide();
+   $(document).ready(function () {
+    $(".add-notes-container").hide();
 
-        // Add button
-        $(".add").on("click", function() {
-            $(".add-notes-container").animate({ width: "toggle" });
-            $(".add").hide();
-        });
+    // Add button
+    $(".add").on("click", function () {
+        $(".add-notes-container").animate({ width: "toggle" });
+        $(".add").hide();
+    });
 
-        // Cancel button
-        $(".cancel").on("click", function() {
-            $(".add-notes-container").animate({ width: "toggle" });
-            $(".newNoteTitle").val("");
-            $(".newNote").val("");
-            $(".add").show();
-        });
+    // Cancel button
+    $(".cancel").on("click", function () {
+        $(".add-notes-container").animate({ width: "toggle" });
+        $(".newNoteTitle").val("");
+        $(".newNote").val("");
+        $(".add").show();
+    });
 
-        // Search functionality
-        $("#search-input").on("input", function() {
+    // Debouncing the search functionality
+    let debounceTimeout;
+    $("#search-input").on("input", function () {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
             let query = $(this).val();
             window.location.href = "?search=" + encodeURIComponent(query);
-        });
+        }, 300); // Adjust the delay (in milliseconds) as needed
     });
+});
+
+</script>
+<script>
+    async function searchMeaning() {
+    const word = document.getElementById('wordInput').value.trim();
+    const meaningDiv = document.getElementById('meaning');
+
+    if (!word) {
+        meaningDiv.innerHTML = `<p>Please enter a word to search.</p>`;
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+        if (!response.ok) {
+            throw new Error('Word not found');
+        }
+        const data = await response.json();
+        displayMeaning(data);
+    } catch (error) {
+        meaningDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+    }
+}
+
+function displayMeaning(data) {
+    const meaningDiv = document.getElementById('meaning');
+    const word = data[0].word;
+    const definition = data[0].meanings[0].definitions[0].definition;
+
+    meaningDiv.innerHTML = `
+        <h3>${word}</h3>
+        <p><strong>Definition:</strong> ${definition}</p>
+    `;
+}
+
 </script>
 {% endblock %}

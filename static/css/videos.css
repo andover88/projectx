@@ -35,3 +35,7 @@ header input {
    
     align-items: middle;
 }
+
+.form-control {
+    background-color: none!important;
+}
