@@ -1,163 +1,133 @@
+/* Import Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
 
-/* Base styles */
-body{
-  height: auto;
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
 }
+
+body {
+    height: auto;
+}
+
 .container {
     max-width: 100%;
     overflow-x: hidden;
 }
+
+/* Heading Styles */
 h2 {
     color: white;
 }
-.main-container {
-display: flex;
-background-color: #222831;
-box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;flex-direction: column;
-width: 90%;
-max-width: 600px;
-padding: 3rem auto;
 
-margin: auto;
-border-radius: 3%;
+/* Main Container */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 600px;
+    padding: 3rem auto;
+    margin: auto;
+    background-color: #222831;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    border-radius: 3%;
 }
+
+/* Scrollbar */
 ::-webkit-scrollbar {
     display: none;
 }
+
+/* Notes Styles */
 div.notes {
     border: 3px solid white;
+    background-color: #222831;
+    padding: 10px;
+    border-radius: 5px;
 }
+
+/* Search Input */
 input#search-input {
     overflow: visible;
     margin-left: 3rem;
 }
+
+/* Top Section */
 .top {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .add {
-font-size: 24px;
-background-color: #4E6E81;
-color: #fff;
-border: none;
-border-radius: 5px;
-padding: 10px 20px;
-cursor: pointer;
+    font-size: 24px;
+    background-color: #4E6E81;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
+/* Add Notes Container */
 .add-notes-container {
-display: none; /* Hide initially, show with JS */
+    display: none; /* Hide initially, show with JS */
 }
 
 .newNoteContainer {
-
-padding: 20px;
-border-radius: 5px;
-background-color: #222831;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #222831;
 }
 
 .newNoteTitle,
 .newNote {
-width: 100%;
-margin-bottom: 10px;
-padding: 10px;
-border-radius: 5px;
-
-background-color: #222831;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #222831;
 }
 
 .buttons {
-display: flex;
-justify-content: space-between;
-background-color: #222831;
+    display: flex;
+    justify-content: space-between;
+    background-color: #222831;
 }
 
 .save,
 .cancel {
-    background-color: #222831;
-padding: 10px 20px;
-border: none;
-border-radius: 5px;
-cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .save {
-background-color: #4E6E81;
-color: white;
+    background-color: #4E6E81;
+    color: white;
 }
 
 .cancel {
-background-color: #FF0303;
-color: white;
+    background-color: #FF0303;
+    color: white;
 }
 
-#notes-container .notes {
-    background-color: #222831;
-
-padding: 10px;
-border-radius: 5px;
-}
+/* Titles */
 ._titles {
-   margin-left: 3rem;
+    margin-left: 3rem;
     color: #76ABAE;
 }
-p{
+
+/* Paragraphs */
+p {
     color: whitesmoke;
 }
 
-
-
-/* Media queries for responsive design */
-@media (max-width: 768px) {
-.main-container {
-width: 100%;
-padding: 10px;
-}
-
-.top {
-flex-direction: column;
-align-items: flex-start;
-}
-
-.add {
-margin-top: 10px;
-width: 100%;
-}
-
-.buttons {
-flex-direction: column;
-}
-
-.buttons .save,
-.buttons .cancel {
-width: 100%;
-margin-bottom: 10px;
-}
-}
-
-
-@media (max-width: 480px) {
-.newNoteContainer {
-padding: 15px;
-}
-
-.newNoteTitle,
-.newNote {
-font-size: 14px;
-}
-
-.save,
-.cancel {
-font-size: 14px;
-padding: 8px;
-}
-}
-
+/* Search Container */
 .search-container {
     text-align: center;
     padding: 20px;
@@ -165,33 +135,71 @@ padding: 8px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 input {
     padding: 10px;
     width: 200px;
     font-size: 16px;
 }
+
 button {
     padding: 10px 15px;
     font-size: 16px;
     margin-left: 5px;
     cursor: pointer;
 }
+
 #meaning {
     margin-top: 20px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-  }
-  
-  .row {
-    max-width: 1146px;
-    padding: 20px 20px 40px;
-    margin: 0 auto;
-  }
-  
-  footer {
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .add {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .buttons .save,
+    .buttons .cancel {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .newNoteContainer {
+        padding: 15px;
+    }
+
+    .newNoteTitle,
+    .newNote {
+        font-size: 14px;
+    }
+
+    .save,
+    .cancel {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+/* Footer Styles */
+footer {
     position: absolute;
     background-color: #242424;
     margin-top: 6rem;
@@ -200,88 +208,89 @@ button {
     left: 0;
     font-family: 'Arial', sans-serif;
     font-size: 11px;
-  }
-  
-  footer .inner {
+}
+
+footer .inner {
     display: flex;
     justify-content: space-between;
-  }
-  
-  footer .copyright {
+}
+
+footer .copyright {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: auto;
     color: #ccc;
-  }
-  
-  footer .meta {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: 80%;
-  }
-  
-  footer .meta ul {
-    list-style-type: none;
-    color: #fff;
-  }
-  
-  footer .meta .links {
-    display: flex;
-    justify-content: space-evenly;
-    margin-right: 20px;
-    width: 70%;
-  }
-  
-  footer .meta .icons {
-    display: flex;
-    justify-content: space-around;
-    font-family: 'FontAwesome';
-    width: 20%;
-  }
-  
-  @media screen and (max-width: 645px) {
-    footer .copyright {
+}
+
+footer .
+.meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+}
+
+footer .meta ul {
+  list-style-type: none;
+  color: #fff;
+}
+
+footer .meta .links {
+  display: flex;
+  justify-content: space-evenly;
+  margin-right: 20px;
+  width: 70%;
+}
+
+footer .meta .icons {
+  display: flex;
+  justify-content: space-around;
+  font-family: 'FontAwesome';
+  width: 20%;
+}
+
+@media screen and (max-width: 645px) {
+  footer .copyright {
       align-items: flex-end;
-    }
-  
-    footer .meta {
+  }
+
+  footer .meta {
       flex-direction: column;
       align-items: flex-end;
-    }
-  
-    footer .meta .links {
+  }
+
+  footer .meta .links {
       order: 2;
       width: 80%;
       justify-content: space-between;
       margin: 10px 0 0 0;
-    }
-  
-    footer .meta .icons {
+  }
+
+  footer .meta .icons {
       order: 1;
       width: 100%;
       justify-content: flex-end;
-    }
-  
-    footer .meta .icons li:not(:last-child) {
-      margin: 0 20px 0 0;
-    }
   }
-  
-  @media screen and (max-width: 450px) {
-    footer .inner {
+
+  footer .meta .icons li:not(:last-child) {
+      margin: 0 20px 0 0;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  footer .inner {
       flex-direction: column;
-    }
-  
-    footer .copyright {
+  }
+
+  footer .copyright {
       position: relative;
       padding: 0 0 20px 0;
       width: 100%;
       align-items: flex-start;
-    }
-  
-    footer .copyright:after {
+  }
+
+  footer .copyright:after {
       content: "";
       position: absolute;
       height: 1px;
@@ -289,34 +298,33 @@ button {
       right: 0;
       bottom: 0;
       background-color: rgba(80, 80, 80, 1);
-    }
-  
-    footer .meta {
+  }
+
+  footer .meta {
       margin: 15px 0 0 0;
       width: 100%;
       flex-direction: row;
-    }
-  
-    footer .meta .links {
+  }
+
+  footer .meta .links {
       margin: 0;
       order: 1;
       align-items: flex-start;
       flex-direction: column;
-    }
-  
-    footer .meta .links li:not(:last-child) {
+  }
+
+  footer .meta .links li:not(:last-child) {
       margin: 0 0 15px 0;
-    }
-  
-    footer .meta .icons {
+  }
+
+  footer .meta .icons {
       order: 2;
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-end;
-    }
-  
-    footer .meta .icons li:not(:last-child) {
-      margin: 0 0 15px 0;
-    }
   }
-  
+
+  footer .meta .icons li:not(:last-child) {
+      margin: 0 0 15px 0;
+  }
+}
